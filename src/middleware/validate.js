@@ -24,8 +24,11 @@ export function validate(schema) {
             next()
         } catch (error) {
             return res.status(400).json({
-                message: "erro de validação1 ",
-                erro: error.message
+                message: "erro de validação ",
+                erros: error.errors.map(e => ({
+                    path: e.path,
+                    message: e.message
+                }))
             })
         }
 
