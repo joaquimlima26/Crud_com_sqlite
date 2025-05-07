@@ -33,12 +33,13 @@ export const getAllUsers = async (req, res) => {
 // }
 
 export const createUser = async (req, res) => {
-    const { name, email } = req.body
+    const { name, email, password } = req.body
     try {
         const newUser = await prisma.user.create({
             data: {
                 name,
-                email
+                email,
+                password
             }
         })
         res.status(201).json(newUser)
@@ -73,12 +74,12 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const id = parseInt(req.params.id)
-    const { name, email } = req.body
+    const { name, email, password } = req.body
 
     try {
        const updatedUser = await prisma.user.update({
             where: { id: id },
-            data: { name, email }
+            data: { name, email, password }
         })
         res.status(200).json(updatedUser)
 
@@ -89,3 +90,18 @@ export const updateUser = async (req, res) => {
         })
     }
 }
+export const getUserId = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const user = await prisma.user.findUnique({
+        where: { id: parseInt(id) },
+      });
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({
+        mensagem: "Error ao procurar o usuario, usuario não encontrado!",
+        erro: error.message,
+      });
+    }
+  };
+  
